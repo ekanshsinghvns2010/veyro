@@ -1,16 +1,20 @@
 package com.veyro.editor.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -26,16 +30,19 @@ fun EditorScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF0B0D10))
+            .background(Color(0xFF090B0F))
     ) {
 
-        // Top toolbar
+        // =====================================================
+        // TOP BAR
+        // =====================================================
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp)
-                .background(Color(0xFF12151A))
-                .padding(horizontal = 12.dp),
+                .background(Color(0xFF11141A))
+                .padding(horizontal = 14.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
 
@@ -48,41 +55,78 @@ fun EditorScreen() {
             Spacer(modifier = Modifier.weight(1f))
 
             TextButton(onClick = {}) {
-                Text("UNDO")
+                Text(
+                    text = "UNDO",
+                    color = Color(0xFF9BA3AF),
+                    fontSize = 11.sp
+                )
             }
 
             TextButton(onClick = {}) {
-                Text("REDO")
+                Text(
+                    text = "REDO",
+                    color = Color(0xFF9BA3AF),
+                    fontSize = 11.sp
+                )
             }
 
             TextButton(onClick = {}) {
-                Text("EXPORT")
+                Text(
+                    text = "EXPORT",
+                    color = Color.White,
+                    fontSize = 11.sp
+                )
             }
         }
 
-        // Preview
+        // =====================================================
+        // PREVIEW AREA
+        // =====================================================
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
-                .padding(12.dp)
-                .background(Color.Black),
+                .padding(horizontal = 12.dp, vertical = 10.dp)
+                .background(Color.Black)
+                .border(
+                    width = 1.dp,
+                    color = Color(0xFF252A33)
+                ),
             contentAlignment = Alignment.Center
         ) {
 
-            Text(
-                text = "Preview",
-                color = Color(0xFF70757D),
-                fontSize = 18.sp
-            )
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+
+                Text(
+                    text = "VEYRO",
+                    color = Color(0xFF303640),
+                    fontSize = 28.sp
+                )
+
+                Spacer(
+                    modifier = Modifier.height(6.dp)
+                )
+
+                Text(
+                    text = "Preview",
+                    color = Color(0xFF555C68),
+                    fontSize = 13.sp
+                )
+            }
         }
 
-        // Tool bar
+        // =====================================================
+        // EDITING TOOLBAR
+        // =====================================================
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(64.dp)
-                .background(Color(0xFF12151A)),
+                .background(Color(0xFF11141A)),
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -91,41 +135,142 @@ fun EditorScreen() {
             EditorTool("TEXT")
             EditorTool("AUDIO")
             EditorTool("EFFECT")
+            EditorTool("LAYER")
         }
 
-        // Timeline
-        Column(
+        // =====================================================
+        // TIMELINE HEADER
+        // =====================================================
+
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(180.dp)
-                .background(Color(0xFF171A20))
-                .padding(10.dp)
+                .height(42.dp)
+                .background(Color(0xFF141820))
+                .padding(horizontal = 12.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
 
             Text(
                 text = "TIMELINE",
                 color = Color.White,
-                fontSize = 14.sp
+                fontSize = 13.sp
             )
 
-            Spacer(
-                modifier = Modifier.height(12.dp)
-            )
+            Spacer(modifier = Modifier.weight(1f))
 
-            Box(
+            Text(
+                text = "00:00:00",
+                color = Color(0xFF8B929D),
+                fontSize = 12.sp
+            )
+        }
+
+        // =====================================================
+        // TIMELINE
+        // =====================================================
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(190.dp)
+                .background(Color(0xFF181B21))
+        ) {
+
+            // Timeline ruler
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(48.dp)
-                    .background(Color(0xFF242831))
+                    .height(30.dp)
+                    .horizontalScroll(
+                        rememberScrollState()
+                    )
+                    .background(Color(0xFF11141A)),
+                verticalAlignment = Alignment.CenterVertically
             ) {
 
-                Text(
-                    text = "No layers",
-                    color = Color(0xFF777D87),
-                    modifier = Modifier.align(Alignment.Center)
-                )
+                for (i in 0..10) {
+
+                    Box(
+                        modifier = Modifier
+                            .width(90.dp)
+                            .fillMaxHeight()
+                    ) {
+
+                        Text(
+                            text = "00:${"%02d".format(i)}",
+                            color = Color(0xFF69717D),
+                            fontSize = 10.sp,
+                            modifier = Modifier.padding(
+                                start = 8.dp,
+                                top = 7.dp
+                            )
+                        )
+                    }
+                }
             }
+
+            // Video track
+            TimelineTrack(
+                name = "VIDEO 01",
+                color = Color(0xFF315A8A)
+            )
+
+            // Text track
+            TimelineTrack(
+                name = "TEXT",
+                color = Color(0xFF674A91)
+            )
+
+            // Audio track
+            TimelineTrack(
+                name = "AUDIO",
+                color = Color(0xFF3D7059)
+            )
         }
+    }
+}
+
+@Composable
+private fun TimelineTrack(
+    name: String,
+    color: Color
+) {
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(42.dp)
+            .background(Color(0xFF1C2027))
+            .border(
+                width = 0.5.dp,
+                color = Color(0xFF292E37)
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        Box(
+            modifier = Modifier
+                .width(88.dp)
+                .fillMaxHeight()
+                .background(Color(0xFF15181E)),
+            contentAlignment = Alignment.CenterStart
+        ) {
+
+            Text(
+                text = name,
+                color = Color(0xFF9AA2AE),
+                fontSize = 10.sp,
+                modifier = Modifier.padding(start = 10.dp)
+            )
+        }
+
+        Box(
+            modifier = Modifier
+                .width(160.dp)
+                .height(28.dp)
+                .background(color)
+        )
     }
 }
 
@@ -141,7 +286,7 @@ private fun EditorTool(
         Text(
             text = title,
             color = Color.White,
-            fontSize = 12.sp
+            fontSize = 11.sp
         )
     }
 }
