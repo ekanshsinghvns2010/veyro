@@ -10,15 +10,20 @@ class ProjectController {
     var selectedLayerId: String? = null
         private set
 
-    fun createNewProject(name: String = "Untitled Project") {
+    fun createNewProject(
+        name: String = "Untitled Project"
+    ): VeyroProject {
 
-        project = VeyroProject(
+        val newProject = VeyroProject(
             id = UUID.randomUUID().toString(),
             name = name,
             composition = Composition()
         )
 
+        project = newProject
         selectedLayerId = null
+
+        return newProject
     }
 
     fun addVideo(
